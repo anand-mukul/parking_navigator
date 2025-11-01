@@ -1,26 +1,31 @@
 // ====== Live Parking Status Updates ======
 
-// Format ISO date to readable format
+// Format ISO date to readable format (IST)
 function formatDateTime(isoString) {
     if (!isoString) return 'Never';
-    const date = new Date(isoString);
-    return date.toLocaleString('en-IN', {
+    const utcString = isoString.endsWith('Z') ? isoString : isoString + 'Z';
+
+    const date = new Date(utcString);
+    const formatted = date.toLocaleString('en-IN', {
+        timeZone: 'Asia/Kolkata',
         year: 'numeric',
         month: 'short',
         day: 'numeric',
         hour: '2-digit',
-        minute: '2-digit'
+        minute: '2-digit',
+        hour12: true 
     });
+
+    return formatted;
 }
 
-// Fetch and update parking area statuses
 function fetchStatuses() {
     const cards = document.querySelectorAll("[id^='status-']");
     cards.forEach(card => {
         const areaId = card.id.split("-")[1];
         fetch(`/api/status/${areaId}`)
             .then(res => {
-                if (!res.ok) throw new Error('Network response was not ok');
+                if (!res.ok) throw new Error('Network response was not ok');                
                 return res.json();
             })
             .then(data => {
