@@ -3,6 +3,8 @@ from flask import Flask, redirect, url_for
 from flask_login import LoginManager, current_user
 from dotenv import load_dotenv
 import os
+from utils import to_ist
+
 
 # Load environment variables
 load_dotenv()
@@ -41,6 +43,7 @@ def create_app():
     app.register_blueprint(auth_bp, url_prefix="/auth")
     app.register_blueprint(admin_bp, url_prefix="/admin")
     app.register_blueprint(public_bp)  # Public uses root URLs
+    app.jinja_env.filters["to_ist"] = to_ist
 
     # Create tables if they don't exist
     with app.app_context():

@@ -6,16 +6,17 @@ function formatDateTime(isoString) {
     const utcString = isoString.endsWith('Z') ? isoString : isoString + 'Z';
 
     const date = new Date(utcString);
-    const formatted = date.toLocaleString('en-IN', {
+    let formatted = date.toLocaleString('en-IN', {
         timeZone: 'Asia/Kolkata',
         year: 'numeric',
         month: 'short',
         day: 'numeric',
         hour: '2-digit',
         minute: '2-digit',
-        hour12: true 
+        hour12: true
     });
 
+    formatted = formatted.replace(/\bam\b/i, 'AM').replace(/\bpm\b/i, 'PM');
     return formatted;
 }
 

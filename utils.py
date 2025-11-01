@@ -1,7 +1,20 @@
 # utils.py
 from models import db, User, ParkingArea, ParkingStatus
 from datetime import datetime
+import pytz
 
+def to_ist(dt):
+    """Convert UTC datetime to IST for display"""
+    if not dt:
+        return None
+    try:
+        if dt.tzinfo is None:
+            import datetime
+            dt = dt.replace(tzinfo=datetime.timezone.utc)
+        ist = pytz.timezone("Asia/Kolkata")
+        return dt.astimezone(ist)
+    except Exception:
+        return dt
 
 def seed_data():
     """
